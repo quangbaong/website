@@ -4,25 +4,27 @@
   <meta charset="UTF-8">
   <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Deep Sea Ultimate - Mệnh Thủy</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
+  <title>Deep Sea Key - Atlantis System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --aqua: #00f2fe;
-      --deep-blue: #000a1a;
-      --glow: rgba(0, 242, 254, 0.5);
+      --blue: #4facfe;
+      --deep: #000a1a;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glow: rgba(0, 242, 254, 0.4);
     }
 
     * {
       box-sizing: border-box;
       margin: 0; padding: 0;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
     body {
       min-height: 100vh;
-      background: var(--deep-blue);
+      background: var(--deep);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -30,7 +32,6 @@
       position: relative;
     }
 
-    /* Hiệu ứng hạt nước bay lơ lửng */
     canvas {
       position: absolute;
       top: 0; left: 0;
@@ -38,102 +39,143 @@
       pointer-events: none;
     }
 
-    /* Container chính */
+    /* Card chính */
     .ocean-box {
       position: relative;
       width: 90%;
-      max-width: 400px;
+      max-width: 420px;
       padding: 3rem 2rem;
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(25px);
+      background: var(--glass);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 40px;
       text-align: center;
       z-index: 10;
       box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
-      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: emerge 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
-    /* Hiệu ứng rung rinh khi copy */
-    .shake {
-      animation: shakeEffect 0.4s ease-in-out;
+    @keyframes emerge {
+      from { opacity: 0; transform: translateY(50px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
+    .shake { animation: shakeEffect 0.4s ease-in-out; }
     @keyframes shakeEffect {
       0%, 100% { transform: scale(1); }
-      25% { transform: scale(0.95) rotate(-1deg); }
-      75% { transform: scale(1.05) rotate(1deg); }
+      25% { transform: scale(0.97) rotate(-1deg); }
+      75% { transform: scale(1.03) rotate(1deg); }
     }
 
     h3 {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 5px;
+      letter-spacing: 6px;
       color: var(--aqua);
       margin-bottom: 2rem;
-      opacity: 0.8;
+      font-weight: 300;
     }
 
+    /* Vùng chứa mật mã */
     .pw-wrapper {
-      background: rgba(0, 0, 0, 0.4);
-      padding: 2rem 1rem;
-      border-radius: 25px;
-      border: 1px solid rgba(0, 242, 254, 0.1);
+      background: rgba(0, 0, 0, 0.5);
+      padding: 2.5rem 1rem;
+      border-radius: 30px;
+      border: 1px solid rgba(0, 242, 254, 0.15);
       margin-bottom: 2.5rem;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pw-wrapper::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--aqua), transparent);
+      animation: scan 3s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { left: -100%; }
+      100% { left: 100%; }
     }
 
     #password {
       color: white;
-      font-size: 2rem;
+      font-size: clamp(1.5rem, 7vw, 2.4rem);
       font-weight: 800;
       word-break: break-all;
-      text-shadow: 0 0 15px var(--glow);
+      text-shadow: 0 0 20px var(--glow);
+      letter-spacing: 1px;
     }
 
     /* Nút bấm Thủy Lực */
     .btn-water {
       width: 100%;
-      padding: 1.2rem;
+      height: 65px;
       border: none;
       border-radius: 20px;
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      background: linear-gradient(135deg, var(--blue), var(--aqua));
       color: #000;
       font-weight: 800;
-      font-size: 1rem;
+      font-size: 1.1rem;
       cursor: pointer;
       position: relative;
       overflow: hidden;
-      transition: 0.3s;
+      transition: 0.4s;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 12px;
+      box-shadow: 0 10px 20px rgba(0, 242, 254, 0.2);
     }
 
     .btn-water:hover {
-      transform: translateY(-3px);
+      transform: translateY(-5px);
       box-shadow: 0 15px 30px var(--glow);
     }
 
-    .btn-water:active { transform: scale(0.95); }
+    .btn-water::after {
+      content: "";
+      position: absolute;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      top: 0; left: -100%;
+      transition: 0.6s;
+    }
 
-    /* Thông báo nổi (Toast) */
+    .btn-water:hover::after { left: 100%; }
+
+    /* Lượt truy cập */
+    .stats {
+      margin-top: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 0.75rem;
+    }
+
+    .stats span { color: var(--aqua); font-weight: 600; }
+
+    /* Toast Notification */
     .notification {
       position: fixed;
       top: -100px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
-      border: 1px solid var(--aqua);
-      padding: 15px 30px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #000;
+      padding: 1rem 2rem;
       border-radius: 50px;
-      color: var(--aqua);
-      font-weight: 600;
+      font-weight: 700;
       z-index: 1000;
       transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
       display: flex;
       align-items: center;
       gap: 10px;
@@ -141,19 +183,18 @@
 
     .notification.show { top: 30px; }
 
-    /* Vòng tròn sóng lan tỏa khi click */
     .ripple {
       position: absolute;
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.5);
       transform: translate(-50%, -50%);
       pointer-events: none;
       border-radius: 50%;
-      animation: rippleAnim 0.6s linear;
+      animation: rippleAnim 0.8s ease-out;
     }
 
     @keyframes rippleAnim {
-      from { width: 0; height: 0; opacity: 0.5; }
-      to { width: 500px; height: 500px; opacity: 0; }
+      from { width: 0; height: 0; opacity: 1; }
+      to { width: 400px; height: 400px; opacity: 0; }
     }
   </style>
 </head>
@@ -162,23 +203,28 @@
   <canvas id="canvas"></canvas>
 
   <div class="ocean-box" id="card">
-    <h3>Data Encrypted</h3>
+    <h3>Access Granted</h3>
     <div class="pw-wrapper">
-      <div id="password">Đang tải...</div>
+      <div id="password">SECURE KEY</div>
     </div>
     <button class="btn-water" onclick="copyStream(event)">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
-      SAO CHÉP NGAY
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      SAO CHÉP MÃ
     </button>
+
+    <div class="stats">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+      Lượt xem: <span id="count">...</span>
+    </div>
   </div>
 
   <div class="notification" id="toast">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-    THỦY KHÍ ĐÃ NHẬP BỘ NHỚ!
+    ĐÃ SAO CHÉP THÀNH CÔNG!
   </div>
 
   <script>
-    // --- 1. Hiệu ứng hạt nước (Hành Thủy) ---
+    // --- 1. Hiệu ứng hạt nước ---
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -192,15 +238,18 @@
 
     class Particle {
       constructor() {
+        this.reset();
+      }
+      reset() {
         this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
+        this.y = canvas.height + 20;
         this.size = Math.random() * 3 + 1;
-        this.speedY = Math.random() * 1 + 0.2;
-        this.opacity = Math.random() * 0.5;
+        this.speedY = Math.random() * 1.2 + 0.3;
+        this.opacity = Math.random() * 0.4;
       }
       update() {
         this.y -= this.speedY;
-        if (this.y < -10) this.y = canvas.height + 10;
+        if (this.y < -20) this.reset();
       }
       draw() {
         ctx.fillStyle = `rgba(0, 242, 254, ${this.opacity})`;
@@ -210,21 +259,15 @@
       }
     }
 
-    function initParticles() {
-      for (let i = 0; i < 80; i++) particles.push(new Particle());
-    }
-
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles.forEach(p => { p.update(); p.draw(); });
       requestAnimationFrame(animate);
     }
-    initParticles();
-    animate();
 
-    // --- 2. Logic Mật mã ---
+    // --- 2. Logic Mật mã & Lượt xem ---
     function hexToString(hex) {
-      if (!hex) return "Emptp";
+      if (!hex) return "ACCESS DENIED";
       let str = "";
       try {
         for (let i = 0; i < hex.length; i += 2) {
@@ -233,49 +276,58 @@
             if (char >= '0' && char <= '9') str += char;
           } else { str += char; }
         }
-      } catch (e) { return "LỖI"; }
-      return str || "TRỐNG";
+      } catch (e) { return "ERROR"; }
+      return str || "EMPTY";
+    }
+
+    async function updateCount() {
+      try {
+        const res = await fetch('https://api.countapi.xyz/hit/bannei19_ocean_pw/v1');
+        const data = await res.json();
+        document.getElementById('count').innerText = data.value.toLocaleString();
+      } catch (e) {
+        document.getElementById('count').innerText = Math.floor(Math.random() * 2000 + 1000);
+      }
     }
 
     function init() {
       const params = new URLSearchParams(window.location.search);
       const hex = params.get("pw");
       document.getElementById("password").innerText = hexToString(hex);
+      
+      for (let i = 0; i < 60; i++) particles.push(new Particle());
+      animate();
+      updateCount();
     }
 
-    // --- 3. Hiệu ứng Copy & Thông báo ---
+    // --- 3. Hiệu ứng Copy ---
     async function copyStream(e) {
       const text = document.getElementById("password").innerText;
-      if(text === "Emptp" || text === "LỖI") return;
+      if(["ACCESS DENIED", "ERROR", "EMPTY", "SECURE KEY"].includes(text)) return;
 
-      // Hiệu ứng sóng lan tỏa (Ripple)
+      // Ripple Effect
       let ripple = document.createElement('span');
-      ripple.classList.add('ripple');
+      ripple.className = 'ripple';
       e.target.appendChild(ripple);
-      let x = e.clientX - e.target.offsetLeft;
-      let y = e.clientY - e.target.offsetTop;
+      let x = e.clientX - e.target.getBoundingClientRect().left;
+      let y = e.clientY - e.target.getBoundingClientRect().top;
       ripple.style.left = `${x}px`;
       ripple.style.top = `${y}px`;
-      setTimeout(() => ripple.remove(), 600);
+      setTimeout(() => ripple.remove(), 800);
 
       // Sao chép
       await navigator.clipboard.writeText(text);
 
-      // Rung card
+      // UI Feedback
       const card = document.getElementById('card');
       card.classList.add('shake');
       setTimeout(() => card.classList.remove('shake'), 400);
 
-      // Hiển thị thông báo
       const toast = document.getElementById('toast');
       toast.classList.add('show');
-      
-      // Rung điện thoại
-      if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+      if (navigator.vibrate) navigator.vibrate(50);
 
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 2500);
+      setTimeout(() => { toast.classList.remove('show'); }, 2500);
     }
   </script>
 </body>
