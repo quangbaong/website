@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Deep Sea System - Atlantis</title>
+  <title>Deep Sea System - UTF8 Secure</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -89,10 +89,11 @@
 
     #password {
       color: white;
-      font-size: clamp(1.5rem, 7vw, 2.4rem);
+      font-size: clamp(1.2rem, 6vw, 2.2rem);
       font-weight: 800;
       word-break: break-all;
       text-shadow: 0 0 20px var(--glow);
+      line-height: 1.4;
     }
 
     .btn-water {
@@ -223,18 +224,34 @@
       requestAnimationFrame(animate);
     }
 
-    function hexToString(hex) {
+    // --- FIX ĐỊNH DẠNG UTF-8 TẠI ĐÂY ---
+    function hexToUtf8(hex) {
       if (!hex) return "ACCESS DENIED";
-      let str = "";
       try {
+        // Bước 1: Chuyển hex thành chuỗi %XX (URL Encode format)
+        let percentStr = "";
         for (let i = 0; i < hex.length; i += 2) {
-          let char = String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-          if (hex.length >= 30) {
-            if (char >= '0' && char <= '9') str += char;
-          } else { str += char; }
+          percentStr += "%" + hex.substr(i, 2);
         }
-      } catch (e) { return "ERROR"; }
-      return str || "EMPTY";
+
+        // Bước 2: Dùng decodeURIComponent để giải mã chuẩn UTF-8
+        let decoded = decodeURIComponent(percentStr);
+
+        // Bước 3: Lọc số nếu chuỗi quá dài (theo yêu cầu cũ của bạn)
+        if (hex.length >= 30) {
+            return decoded.replace(/\D/g, ""); // Chỉ lấy số
+        }
+        return decoded;
+      } catch (e) {
+        // Nếu lỗi decode (do hex không chuẩn UTF-8), quay về cách cũ để chữa cháy
+        try {
+          let str = "";
+          for (let i = 0; i < hex.length; i += 2) {
+            str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+          }
+          return str;
+        } catch (e2) { return "ERROR"; }
+      }
     }
 
     async function updateViewCount() {
@@ -250,7 +267,7 @@
     function init() {
       const params = new URLSearchParams(window.location.search);
       const hex = params.get("pw");
-      document.getElementById("password").innerText = hexToString(hex);
+      document.getElementById("password").innerText = hexToUtf8(hex);
       for (let i = 0; i < 60; i++) particles.push(new Particle());
       animate();
       updateViewCount();
