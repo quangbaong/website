@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Hệ Thống Xác Thực - Atlantis</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap" rel="stylesheet">
@@ -32,6 +32,24 @@
       justify-content: center;
       overflow: hidden;
       position: relative;
+      touch-action: manipulation;
+    }
+
+    /* Hiệu ứng chạm tỏa giọt nước TOÀN MÀN HÌNH */
+    .water-drop {
+      position: absolute;
+      border: 2px solid var(--primary-cyan);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      animation: dropSpread 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+      pointer-events: none; 
+      z-index: 9999;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.5), inset 0 0 10px rgba(0, 242, 254, 0.3);
+    }
+
+    @keyframes dropSpread {
+      0% { width: 0; height: 0; opacity: 1; border-width: 4px; }
+      100% { width: 120px; height: 120px; opacity: 0; border-width: 0px; }
     }
 
     /* Canvas nền hạt nước lơ lửng */
@@ -42,7 +60,7 @@
       pointer-events: none;
     }
 
-    /* Container chính - Auto-Scaling cho mọi thiết bị */
+    /* Container chính */
     .ocean-card {
       position: relative;
       width: 90%;
@@ -184,7 +202,7 @@
     <h1>Security Gateway</h1>
     <p>Nhấn nút để khởi tạo mật mã an toàn</p>
     
-    <button class="btn-action" onclick="handleStep()">
+    <button class="btn-action" onclick="handleStep(event)">
       BẤM ĐỂ TIẾP TỤC
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"></polyline></svg>
     </button>
@@ -201,7 +219,17 @@
     const link4m = "https://link4m.co/st?api=66b5a7bef0341f72583dedf9&url=";
     const baseNextStep = "https://bannei19.github.io/website/?pw="; 
 
-    // 1. Khởi tạo hiệu ứng hạt nước
+    // --- HIỆU ỨNG CHẠM TỎA GIỌT NƯỚC ---
+    document.addEventListener('click', function(e) {
+      const drop = document.createElement('div');
+      drop.className = 'water-drop';
+      drop.style.left = e.clientX + 'px';
+      drop.style.top = e.clientY + 'px';
+      document.body.appendChild(drop);
+      setTimeout(() => drop.remove(), 800);
+    });
+
+    // --- KHỞI TẠO HẠT NƯỚC ---
     const canvas = document.getElementById('waterCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -214,9 +242,7 @@
     resize();
 
     class Particle {
-      constructor() {
-        this.reset();
-      }
+      constructor() { this.reset(); }
       reset() {
         this.x = Math.random() * canvas.width;
         this.y = canvas.height + 10;
@@ -242,10 +268,9 @@
       requestAnimationFrame(animate);
     }
 
-    // 2. Bộ đếm lượt truy cập (Sử dụng API miễn phí)
+    // --- BỘ ĐẾM LƯỢT TRUY CẬP ---
     async function updateViewCount() {
       try {
-        // Namespace riêng cho dự án của bạn để tránh trùng
         const res = await fetch('https://api.countapi.xyz/hit/bannei19_ocean/v1');
         const data = await res.json();
         document.getElementById('count').innerText = data.value.toLocaleString();
@@ -254,24 +279,37 @@
       }
     }
 
-    // 3. Xử lý logic
     function getAbc() {
       const p = new URLSearchParams(window.location.search);
       return p.get("abc") || "";
     }
 
-    function handleStep() {
+    // --- FIX LỖI NHẢY LINK ---
+    function handleStep(e) {
+      // Ngăn click lan ra ngoài để không bị 2 giọt nước trùng nhau
+      if (e) e.stopPropagation(); 
+      
+      if (e) {
+        const drop = document.createElement('div');
+        drop.className = 'water-drop';
+        drop.style.left = e.clientX + 'px';
+        drop.style.top = e.clientY + 'px';
+        document.body.appendChild(drop);
+        setTimeout(() => drop.remove(), 800);
+      }
+
       const abc = getAbc();
       const nextUrl = baseNextStep + encodeURIComponent(abc);
+      const finalUrl = link4m + encodeURIComponent(nextUrl);
       
       const toast = document.getElementById('toast');
       toast.classList.add('show');
       
       if (navigator.vibrate) navigator.vibrate(50);
 
+      // Chuyển hướng TRỰC TIẾP bằng location.href (Không bị Safari/App chặn)
       setTimeout(() => {
-        window.open(link4m + encodeURIComponent(nextUrl), "_blank");
-        window.location.href = "about:blank"; 
+        window.location.href = finalUrl; 
       }, 1000);
     }
 
