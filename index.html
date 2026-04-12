@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Deep Sea Key - Atlantis System</title>
+  <title>Deep Sea System - Atlantis</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -39,12 +39,11 @@
       pointer-events: none;
     }
 
-    /* Card chính */
     .ocean-box {
       position: relative;
-      width: 90%;
+      width: 92%;
       max-width: 420px;
-      padding: 3rem 2rem;
+      padding: 3.5rem 2rem;
       background: var(--glass);
       backdrop-filter: blur(30px);
       -webkit-backdrop-filter: blur(30px);
@@ -77,7 +76,6 @@
       font-weight: 300;
     }
 
-    /* Vùng chứa mật mã */
     .pw-wrapper {
       background: rgba(0, 0, 0, 0.5);
       padding: 2.5rem 1rem;
@@ -89,30 +87,14 @@
       overflow: hidden;
     }
 
-    .pw-wrapper::before {
-      content: "";
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--aqua), transparent);
-      animation: scan 3s linear infinite;
-    }
-
-    @keyframes scan {
-      0% { left: -100%; }
-      100% { left: 100%; }
-    }
-
     #password {
       color: white;
       font-size: clamp(1.5rem, 7vw, 2.4rem);
       font-weight: 800;
       word-break: break-all;
       text-shadow: 0 0 20px var(--glow);
-      letter-spacing: 1px;
     }
 
-    /* Nút bấm Thủy Lực */
     .btn-water {
       width: 100%;
       height: 65px;
@@ -130,7 +112,6 @@
       align-items: center;
       justify-content: center;
       gap: 12px;
-      box-shadow: 0 10px 20px rgba(0, 242, 254, 0.2);
     }
 
     .btn-water:hover {
@@ -138,18 +119,6 @@
       box-shadow: 0 15px 30px var(--glow);
     }
 
-    .btn-water::after {
-      content: "";
-      position: absolute;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-      top: 0; left: -100%;
-      transition: 0.6s;
-    }
-
-    .btn-water:hover::after { left: 100%; }
-
-    /* Lượt truy cập */
     .stats {
       margin-top: 2rem;
       display: flex;
@@ -162,23 +131,18 @@
 
     .stats span { color: var(--aqua); font-weight: 600; }
 
-    /* Toast Notification */
     .notification {
       position: fixed;
       top: -100px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.95);
+      background: #fff;
       color: #000;
       padding: 1rem 2rem;
       border-radius: 50px;
       font-weight: 700;
       z-index: 1000;
-      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
 
     .notification.show { top: 30px; }
@@ -203,9 +167,9 @@
   <canvas id="canvas"></canvas>
 
   <div class="ocean-box" id="card">
-    <h3>Access Granted</h3>
+    <h3>Data Key</h3>
     <div class="pw-wrapper">
-      <div id="password">SECURE KEY</div>
+      <div id="password">LOADING...</div>
     </div>
     <button class="btn-water" onclick="copyStream(event)">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
@@ -214,17 +178,13 @@
 
     <div class="stats">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-      Lượt xem: <span id="count">...</span>
+      Lượt xem: <span id="count">0</span>
     </div>
   </div>
 
-  <div class="notification" id="toast">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-    ĐÃ SAO CHÉP THÀNH CÔNG!
-  </div>
+  <div class="notification" id="toast">🌊 ĐÃ SAO CHÉP!</div>
 
   <script>
-    // --- 1. Hiệu ứng hạt nước ---
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -237,14 +197,12 @@
     resize();
 
     class Particle {
-      constructor() {
-        this.reset();
-      }
+      constructor() { this.reset(); }
       reset() {
         this.x = Math.random() * canvas.width;
         this.y = canvas.height + 20;
         this.size = Math.random() * 3 + 1;
-        this.speedY = Math.random() * 1.2 + 0.3;
+        this.speedY = Math.random() * 1.5 + 0.5;
         this.opacity = Math.random() * 0.4;
       }
       update() {
@@ -265,7 +223,6 @@
       requestAnimationFrame(animate);
     }
 
-    // --- 2. Logic Mật mã & Lượt xem ---
     function hexToString(hex) {
       if (!hex) return "ACCESS DENIED";
       let str = "";
@@ -280,13 +237,13 @@
       return str || "EMPTY";
     }
 
-    async function updateCount() {
+    async function updateViewCount() {
       try {
-        const res = await fetch('https://api.countapi.xyz/hit/bannei19_ocean_pw/v1');
+        const res = await fetch('https://api.countapi.xyz/hit/bannei19_v3/visits');
         const data = await res.json();
         document.getElementById('count').innerText = data.value.toLocaleString();
       } catch (e) {
-        document.getElementById('count').innerText = Math.floor(Math.random() * 2000 + 1000);
+        document.getElementById('count').innerText = "1,024";
       }
     }
 
@@ -294,40 +251,31 @@
       const params = new URLSearchParams(window.location.search);
       const hex = params.get("pw");
       document.getElementById("password").innerText = hexToString(hex);
-      
       for (let i = 0; i < 60; i++) particles.push(new Particle());
       animate();
-      updateCount();
+      updateViewCount();
     }
 
-    // --- 3. Hiệu ứng Copy ---
     async function copyStream(e) {
       const text = document.getElementById("password").innerText;
-      if(["ACCESS DENIED", "ERROR", "EMPTY", "SECURE KEY"].includes(text)) return;
+      if(["ACCESS DENIED", "ERROR", "EMPTY", "LOADING..."].includes(text)) return;
 
-      // Ripple Effect
       let ripple = document.createElement('span');
       ripple.className = 'ripple';
       e.target.appendChild(ripple);
-      let x = e.clientX - e.target.getBoundingClientRect().left;
-      let y = e.clientY - e.target.getBoundingClientRect().top;
-      ripple.style.left = `${x}px`;
-      ripple.style.top = `${y}px`;
+      let rect = e.target.getBoundingClientRect();
+      ripple.style.left = `${e.clientX - rect.left}px`;
+      ripple.style.top = `${e.clientY - rect.top}px`;
       setTimeout(() => ripple.remove(), 800);
 
-      // Sao chép
       await navigator.clipboard.writeText(text);
-
-      // UI Feedback
-      const card = document.getElementById('card');
-      card.classList.add('shake');
-      setTimeout(() => card.classList.remove('shake'), 400);
+      document.getElementById('card').classList.add('shake');
+      setTimeout(() => document.getElementById('card').classList.remove('shake'), 400);
 
       const toast = document.getElementById('toast');
       toast.classList.add('show');
       if (navigator.vibrate) navigator.vibrate(50);
-
-      setTimeout(() => { toast.classList.remove('show'); }, 2500);
+      setTimeout(() => { toast.classList.remove('show'); }, 2000);
     }
   </script>
 </body>
